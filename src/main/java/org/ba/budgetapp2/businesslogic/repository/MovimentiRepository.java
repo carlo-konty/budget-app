@@ -21,10 +21,12 @@ public interface MovimentiRepository extends JpaRepository<MovimentiModel,Long> 
 
     @Transactional
     @Modifying
-    @Query(value = "insert into budget_dba.movimento (category,date,description,value,id) " +
-            "values (:category,:date,:description,:value,nextval('movimento_seq'))",nativeQuery = true)
+    @Query(value = "insert into budget_dba.movimento (category,date,description,value,conto_o_carta,id) " +
+            "values (:category,:date,:description,:value,:conto_o_carta,nextval('movimento_seq'))",nativeQuery = true)
     void addMovimento(@Param(value = "category") String category,
                                 @Param(value = "date") Date date,
                                 @Param(value = "description") String description,
-                                @Param(value = "value") Double value);
+                                @Param(value = "value") Double value,
+                                @Param(value = "conto_o_carta") String contoOrCarta
+    );
 }

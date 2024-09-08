@@ -4,6 +4,7 @@ public enum IntesaSanPaoloIndex {
 
         DATA(0),
         DETTAGLI(2),
+        CONTO_O_CARTA(3),
         CATEGORIA(5),
         VALORE(7);
 

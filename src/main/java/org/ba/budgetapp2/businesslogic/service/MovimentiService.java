@@ -27,7 +27,12 @@ public class MovimentiService {
     }
 
     public MovimentiModel save(MovimentiModel movimentiModel) {
-        this.movimentiRepository.addMovimento(movimentiModel.getCategory(),movimentiModel.getDate(),movimentiModel.getDescription(),movimentiModel.getValue());
+        this.movimentiRepository.addMovimento(
+                movimentiModel.getCategory(),
+                movimentiModel.getDate(),
+                movimentiModel.getDescription(),
+                movimentiModel.getValue(),
+                movimentiModel.getContoOrCarta());
         return movimentiModel;
     }
 

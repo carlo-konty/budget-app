@@ -40,14 +40,17 @@ public class XLSService {
                 }
                 log.info("Date: {}",row.get(IntesaSanPaoloIndex.DATA.getValore()));
                 log.info("Description: {}",row.get(IntesaSanPaoloIndex.DETTAGLI.getValore()));
+                log.info("Conto o Carta: {}",row.get(IntesaSanPaoloIndex.CONTO_O_CARTA.getValore()));
                 log.info("Category: {}",row.get(IntesaSanPaoloIndex.CATEGORIA.getValore()));
                 log.info("Value: {}",row.get(IntesaSanPaoloIndex.VALORE.getValore()));
                 MovimentiModel movimento = MovimentiModel.builder()
                         .date(new Date(String.valueOf(row.get(IntesaSanPaoloIndex.DATA.getValore()))))
                         .description(row.get(IntesaSanPaoloIndex.DETTAGLI.getValore()))
+                        .contoOrCarta(row.get(IntesaSanPaoloIndex.CONTO_O_CARTA.getValore()))
                         .category(row.get(IntesaSanPaoloIndex.CATEGORIA.getValore()))
                         .value(Double.parseDouble(row.get(IntesaSanPaoloIndex.VALORE.getValore())))
                         .build();
+                log.info("Movimento builded: {}", movimento);
                 movimentiModelList.add(movimento);
             }
         }

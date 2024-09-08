@@ -22,6 +22,9 @@ public class MovimentiModel {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "conto_o_carta")
+    private String contoOrCarta;
+
     @Column(name = "value")
     private Double value;
 
