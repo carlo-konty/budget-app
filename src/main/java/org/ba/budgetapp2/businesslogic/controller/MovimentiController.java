@@ -27,4 +27,9 @@ public class MovimentiController {
         return ResponseEntity.ok(this.movimentiService.save(movimentiModel));
     }
 
+    @GetMapping("/run")
+    public ResponseEntity<?> run() {
+        return ResponseEntity.ok(this.movimentiService.saveAll());
+    }
+
 }

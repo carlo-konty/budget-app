@@ -1,18 +1,16 @@
 package org.ba.budgetapp2.businesslogic.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Generated;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
 @Entity
-@Table(name = "movimento")
+@Table(name = "budget_dba.movimento")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class MovimentiModel {
 
     @Column(name = "id")

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 @RestController
 @RequestMapping("/test")
@@ -24,6 +25,16 @@ public class TestController {
     @GetMapping("/run")
     public ResponseEntity run() throws IOException {
         return ResponseEntity.ok(this.testService.readData());
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity index() throws IOException {
+        return ResponseEntity.ok(this.testService.getMovimenti());
+    }
+
+    @GetMapping("/directory")
+    public ResponseEntity indexDirectory() throws IOException {
+        return ResponseEntity.ok(this.testService.testDirectory());
     }
 
 }

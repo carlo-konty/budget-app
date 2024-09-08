@@ -15,11 +15,16 @@ import java.util.*;
 @Data
 public class XLSReader {
 
-    private FileInputStream file = new FileInputStream(new File("C:\\Users\\Giuseppe\\OneDrive\\Desktop\\LIBRO MASTRO\\MOVIMENTI\\2024\\1.xlsx"));
-    private Workbook workbook = new XSSFWorkbook(file);
+    private String month;
+    private String year;
+    private FileInputStream file;
+    private Workbook workbook;
     private Map<Integer,List<String>> data = new HashMap<>();
 
-    public XLSReader() throws IOException {
+    public XLSReader(String year, String month) throws IOException {
+        this.year = year; this.month = month;
+        this.file = new FileInputStream("C:\\Users\\Giuseppe\\OneDrive\\Desktop\\LIBRO MASTRO\\MOVIMENTI\\" + year + "\\" + month);
+        this.workbook = new XSSFWorkbook(file);
         Sheet sheet = workbook.getSheetAt(0);
         int i = 0;
         Iterator<Row> rowIterator = sheet.iterator();
@@ -27,18 +32,25 @@ public class XLSReader {
         while (rowIterator.hasNext()) {
             Row row = rowIterator.next();
             Iterator<Cell> cellIterator = row.cellIterator();
-
-            Integer letter = row.getRowNum();
-            log.info("POSIZIONE: {}", letter);
             data.put(i, new ArrayList<>());
             while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();
                 switch (cell.getCellType()) {
                     case CellType.NUMERIC: {
-                        data.get(i).add(String.valueOf(cell.getNumericCellValue()));
+                        if (DateUtil.isCellDateFormatted(cell)) {
+                            DataFormatter dataFormatter = new DataFormatter();
+                            String cellStringValue = dataFormatter.formatCellValue(cell);
+                            log.info(">>>>>>>> DATE: {}",cellStringValue);
+                            data.get(i).add(cellStringValue);
+                        }
+                        else {
+                            log.info(">>>>>>>> NUMERIC: {}",cell.getNumericCellValue());
+                            data.get(i).add(String.valueOf(cell.getNumericCellValue()));
+                        }
                         break;
                     }
                     case CellType.STRING: {
+                        log.info(">>>>>>>> STRING: {}",cell.getStringCellValue());
                         data.get(i).add(cell.getStringCellValue());
                         break;
                     }
