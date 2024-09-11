@@ -1,7 +1,11 @@
-package org.ba.budgetapp2.businesslogic.service;
+package org.ba.budgetapp2.businesslogic.service.intesa;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.ba.budgetapp2.businesslogic.entities.MovimentiModel;
+import org.ba.budgetapp2.businesslogic.service.interfaces.XLSServiceInterface;
+import org.ba.budgetapp2.businesslogic.service.xls.XLSReader;
+import org.ba.budgetapp2.businesslogic.service.xls.XLSWriter;
 import org.ba.budgetapp2.costants.IntesaSanPaoloIndex;
 import org.springframework.stereotype.Service;
 
@@ -11,38 +15,21 @@ import java.util.*;
 
 @Service
 @Slf4j
-public class XLSService {
+public class IntesaXlsService implements XLSServiceInterface {
 
     Map<Integer, List<String>> data = new HashMap<>();
 
-
-    public Integer getMovimentiFirstIndex(Map<Integer,List<String>> data) throws IOException {
-        for (Map.Entry<Integer, List<String>> entry : data.entrySet()) {
-            if (entry.getValue() != null && entry.getValue().size() > 1) {
-                if (entry.getValue().get(0).equalsIgnoreCase("data")) {
-                    return entry.getKey() + 1;
-                }
-            }
-        }
-        return -1;
-    }
 
     public List<MovimentiModel> getMovimentiList(XLSReader reader) throws IOException {
         List<MovimentiModel> movimentiModelList = new ArrayList<>();
         data = reader.getData();
         Integer firstIndex = getMovimentiFirstIndex(data);
-        log.info("SIZE: {}", data.size());
         for(int i = firstIndex; i < data.size()-1; i++) {
             List<String> row = data.get(i);
             if(row != null && row.size() == 8) {
                 if(row.get(IntesaSanPaoloIndex.DATA.getValore()) == null || row.get(IntesaSanPaoloIndex.DATA.getValore()).equalsIgnoreCase(" ")) {
                     continue;
                 }
-                log.info("Date: {}",row.get(IntesaSanPaoloIndex.DATA.getValore()));
-                log.info("Description: {}",row.get(IntesaSanPaoloIndex.DETTAGLI.getValore()));
-                log.info("Conto o Carta: {}",row.get(IntesaSanPaoloIndex.CONTO_O_CARTA.getValore()));
-                log.info("Category: {}",row.get(IntesaSanPaoloIndex.CATEGORIA.getValore()));
-                log.info("Value: {}",row.get(IntesaSanPaoloIndex.VALORE.getValore()));
                 MovimentiModel movimento = MovimentiModel.builder()
                         .date(new Date(String.valueOf(row.get(IntesaSanPaoloIndex.DATA.getValore()))))
                         .description(row.get(IntesaSanPaoloIndex.DETTAGLI.getValore()))
@@ -50,7 +37,6 @@ public class XLSService {
                         .category(row.get(IntesaSanPaoloIndex.CATEGORIA.getValore()))
                         .value(Double.parseDouble(row.get(IntesaSanPaoloIndex.VALORE.getValore())))
                         .build();
-                log.info("Movimento builded: {}", movimento);
                 movimentiModelList.add(movimento);
             }
         }
@@ -86,6 +72,25 @@ public class XLSService {
         }
         return allMovimentiModels;
     }
+
+    public void writeToXlsModel(XLSWriter writer) throws IOException {
+        Sheet sheet = writer.getSheet();
+
+    }
+
+    //metodi privati di utility alla classe
+    private Integer getMovimentiFirstIndex(Map<Integer,List<String>> data) throws IOException {
+        for (Map.Entry<Integer, List<String>> entry : data.entrySet()) {
+            if (entry.getValue() != null && entry.getValue().size() > 1) {
+                if (entry.getValue().get(0).equalsIgnoreCase("data")) {
+                    return entry.getKey() + 1;
+                }
+            }
+        }
+        return -1;
+    }
+
+
 
 
 }

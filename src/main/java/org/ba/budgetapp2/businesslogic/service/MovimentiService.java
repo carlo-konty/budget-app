@@ -4,11 +4,11 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.ba.budgetapp2.businesslogic.entities.MovimentiModel;
 import org.ba.budgetapp2.businesslogic.repository.MovimentiRepository;
+import org.ba.budgetapp2.businesslogic.service.intesa.IntesaXlsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,12 +20,13 @@ public class MovimentiService {
     private MovimentiRepository movimentiRepository;
 
     @Autowired
-    private XLSService xlsService;
+    private IntesaXlsService intesaXlsService;
 
     public List<MovimentiModel> getAll() {
         return this.movimentiRepository.findAll();
     }
 
+    @Transactional
     public MovimentiModel save(MovimentiModel movimentiModel) {
         this.movimentiRepository.addMovimento(
                 movimentiModel.getCategory(),
@@ -40,7 +41,7 @@ public class MovimentiService {
     public boolean saveAll() {
         Map<String,List<MovimentiModel>> data;
         try {
-            data = this.xlsService.iterateOverFolder();
+            data = this.intesaXlsService.iterateOverFolder();
             for(Map.Entry<String, List<MovimentiModel>> entry : data.entrySet()) {
                 for(MovimentiModel movimentiModel : entry.getValue()) {
                     save(movimentiModel);
@@ -52,6 +53,11 @@ public class MovimentiService {
         }
         return true;
     }
+
+    public List<MovimentiModel> getMovimentiListByYearAndMonth(Integer year, Integer month) {
+        return this.movimentiRepository.getMovimentiModelByMonthAndYear(year,month);
+    }
+
 
 
 

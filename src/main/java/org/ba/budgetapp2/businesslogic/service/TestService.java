@@ -2,11 +2,12 @@ package org.ba.budgetapp2.businesslogic.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.ba.budgetapp2.businesslogic.entities.MovimentiModel;
+import org.ba.budgetapp2.businesslogic.service.intesa.IntesaXlsService;
+import org.ba.budgetapp2.businesslogic.service.xls.XLSReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ import java.util.Map;
 public class TestService {
 
     @Autowired
-    private XLSService xlsService;
+    private IntesaXlsService intesaXlsService;
 
     public String test() {
         return "Hello World!";
@@ -31,11 +32,11 @@ public class TestService {
     }
 
     public List<MovimentiModel> getMovimenti() throws IOException {
-        return xlsService.getMovimentiList(new XLSReader("2024","8"));
+        return intesaXlsService.getMovimentiList(new XLSReader("2024","8"));
     }
 
     public Map<String,List<MovimentiModel>> testDirectory() throws IOException {
-        return xlsService.iterateOverFolder();
+        return intesaXlsService.iterateOverFolder();
     }
 
 
