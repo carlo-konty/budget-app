@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.ba.budgetapp2.businesslogic.entities.MovimentiModel;
 import org.ba.budgetapp2.businesslogic.service.intesa.IntesaXlsService;
 import org.ba.budgetapp2.businesslogic.service.xls.XLSReader;
+import org.ba.budgetapp2.businesslogic.service.xls.XLSWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,10 @@ public class TestService {
 
     public Map<String,List<MovimentiModel>> testDirectory() throws IOException {
         return intesaXlsService.iterateOverFolder();
+    }
+
+    public void testWrite() throws IOException {
+        intesaXlsService.writeToXlsModel(new XLSWriter(2024,1));
     }
 
 

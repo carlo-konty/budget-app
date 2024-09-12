@@ -13,14 +13,15 @@ import java.io.IOException;
 @Slf4j
 public class XLSWriter {
 
-    private String month;
-    private String year;
+    private int month;
+    private int year;
     private Sheet sheet;
+    private Workbook workbook;
 
-    public XLSWriter(String month, String year) throws IOException {
+    public XLSWriter(int year,int month) throws IOException {
         this.year = year; this.month = month;
-        FileInputStream file = new FileInputStream("C:\\Users\\Giuseppe\\OneDrive\\Desktop\\LIBRO MASTRO\\PLANNER\\Budget-PlannerTEST.xls");
-        Workbook workbook = new XSSFWorkbook(file);
+        FileInputStream file = new FileInputStream("C:\\Users\\Giuseppe\\OneDrive\\Desktop\\LIBRO MASTRO\\PLANNER\\Budget-PlannerTEST.xlsx");
+        this.workbook = new XSSFWorkbook(file);
         this.sheet = workbook.getSheetAt(0);
     }
 

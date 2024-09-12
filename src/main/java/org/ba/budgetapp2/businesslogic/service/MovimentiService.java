@@ -19,9 +19,6 @@ public class MovimentiService {
     @Autowired
     private MovimentiRepository movimentiRepository;
 
-    @Autowired
-    private IntesaXlsService intesaXlsService;
-
     public List<MovimentiModel> getAll() {
         return this.movimentiRepository.findAll();
     }
@@ -38,18 +35,11 @@ public class MovimentiService {
     }
 
     @Transactional
-    public boolean saveAll() {
-        Map<String,List<MovimentiModel>> data;
-        try {
-            data = this.intesaXlsService.iterateOverFolder();
-            for(Map.Entry<String, List<MovimentiModel>> entry : data.entrySet()) {
-                for(MovimentiModel movimentiModel : entry.getValue()) {
-                    save(movimentiModel);
-                }
+    public boolean saveAll(Map<String,List<MovimentiModel>> data) {
+        for(Map.Entry<String, List<MovimentiModel>> entry : data.entrySet()) {
+            for(MovimentiModel movimentiModel : entry.getValue()) {
+                save(movimentiModel);
             }
-        } catch (IOException exception) {
-            log.error("Error: {}", exception.getMessage());
-            return false;
         }
         return true;
     }
@@ -57,6 +47,8 @@ public class MovimentiService {
     public List<MovimentiModel> getMovimentiListByYearAndMonth(Integer year, Integer month) {
         return this.movimentiRepository.getMovimentiModelByMonthAndYear(year,month);
     }
+
+
 
 
 

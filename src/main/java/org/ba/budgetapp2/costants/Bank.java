@@ -2,7 +2,8 @@ package org.ba.budgetapp2.costants;
 
 public enum Bank {
 
-    INTESA("intesa");
+    INTESA("INTESA"),
+    MANUALE("MANUALE");
 
     private String value;
 

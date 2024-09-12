@@ -1,15 +1,21 @@
 package org.ba.budgetapp2.businesslogic.service.intesa;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.ba.budgetapp2.businesslogic.entities.MovimentiModel;
+import org.ba.budgetapp2.businesslogic.service.MovimentiService;
 import org.ba.budgetapp2.businesslogic.service.interfaces.XLSServiceInterface;
 import org.ba.budgetapp2.businesslogic.service.xls.XLSReader;
 import org.ba.budgetapp2.businesslogic.service.xls.XLSWriter;
 import org.ba.budgetapp2.costants.IntesaSanPaoloIndex;
+import org.ba.budgetapp2.costants.MappaIntesaFoglio;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -17,7 +23,11 @@ import java.util.*;
 @Slf4j
 public class IntesaXlsService implements XLSServiceInterface {
 
-    Map<Integer, List<String>> data = new HashMap<>();
+
+    @Autowired
+    private MovimentiService movimentiService;
+
+    private Map<Integer, List<String>> data = new HashMap<>();
 
 
     public List<MovimentiModel> getMovimentiList(XLSReader reader) throws IOException {
@@ -43,6 +53,7 @@ public class IntesaXlsService implements XLSServiceInterface {
         return movimentiModelList;
     }
 
+    //TODO DA SPOSTARE ALTROVE IN UNA FACADE
     public Map<String,List<MovimentiModel>> iterateOverFolder() throws IOException {
         Map<String,List<MovimentiModel>> allMovimentiModels = new HashMap<>();
         final String path = "C:\\Users\\Giuseppe\\OneDrive\\Desktop\\LIBRO MASTRO\\MOVIMENTI";
@@ -75,7 +86,18 @@ public class IntesaXlsService implements XLSServiceInterface {
 
     public void writeToXlsModel(XLSWriter writer) throws IOException {
         Sheet sheet = writer.getSheet();
-
+        List<MovimentiModel> movimentiModels = movimentiService.getMovimentiListByYearAndMonth(2024,2);
+        Map<String,Integer> map = MappaIntesaFoglio.getMapIntesa();
+        log.info(movimentiModels.toString());
+        for(MovimentiModel movimentiModel : movimentiModels) {
+            log.info("movimentiModel: {}",movimentiModel);
+            Row row = sheet.getRow(map.get(movimentiModel.getCategory()));
+            Cell cell = row.getCell(1);
+            cell.setCellValue("TEST");
+        }
+        FileOutputStream outputStream = new FileOutputStream("C:\\Users\\Giuseppe\\OneDrive\\Desktop\\LIBRO MASTRO\\PLANNER\\Budget-PlannerTEST.xlsx");
+        writer.getWorkbook().write(outputStream);
+        outputStream.close();
     }
 
     //metodi privati di utility alla classe

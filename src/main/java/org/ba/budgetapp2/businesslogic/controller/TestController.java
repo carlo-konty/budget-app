@@ -37,4 +37,10 @@ public class TestController {
         return ResponseEntity.ok(this.testService.testDirectory());
     }
 
+    @GetMapping("/write")
+    public ResponseEntity write() throws IOException {
+        testService.testWrite();
+        return ResponseEntity.ok("OK");
+    }
+
 }

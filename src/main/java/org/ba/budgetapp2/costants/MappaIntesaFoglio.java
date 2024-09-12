@@ -1,7 +1,7 @@
 package org.ba.budgetapp2.costants;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public enum MappaIntesaFoglio {
 
@@ -52,5 +52,42 @@ public enum MappaIntesaFoglio {
 
     public String getName() {
         return this.name;
+    }
+
+    public static Map<String,Integer> getMapIntesa() {
+        Map<String, Integer> categorieMap = new HashMap<>();
+        categorieMap.put("Viaggi e vacanze", 73);
+        categorieMap.put("Treno, aereo, nave", 76);
+        categorieMap.put("Trasporti, noleggi, taxi e parcheggi", 45);
+        categorieMap.put("Trasporti varie", 45);
+        categorieMap.put("Tempo libero varie", 61);
+        categorieMap.put("Tabaccai e simili", 39);
+        categorieMap.put("Stipendi e pensioni", 14);
+        categorieMap.put("Spettacoli e musei", 59);
+        categorieMap.put("Spese mediche", 67);
+        categorieMap.put("Ristoranti e bar", 51);
+        categorieMap.put("Rimborsi spese e storni", 16);
+        categorieMap.put("Rate piani pensionistici", 25);
+        categorieMap.put("Prelievi", 39);
+        categorieMap.put("Manutenzione casa", 46);
+        categorieMap.put("Libri, film e musica", 59);
+        categorieMap.put("Investimenti, BDR e XME Salvadanaio", 24);
+        categorieMap.put("Imposte sul reddito e tasse varie", 35);
+        categorieMap.put("Generi alimentari e supermercato", 50);
+        categorieMap.put("Farmacia", 68);
+        categorieMap.put("Famiglie varie", 37);
+        categorieMap.put("Entrate varie", 17);
+        categorieMap.put("Domiciliazioni e Utenze", 35);
+        categorieMap.put("Disinvestimenti, BDR e XME Salvadanaio", 39);
+        categorieMap.put("Cura della persona", 53);
+        categorieMap.put("Corsi e sport", 61);
+        categorieMap.put("Cellulare", 36);
+        categorieMap.put("Casa varie", 37);
+        categorieMap.put("Carburanti", 44);
+        categorieMap.put("Bonifici in uscita", 23);
+        categorieMap.put("Altre uscite", 39);
+        categorieMap.put("Addebiti vari", 39);
+        categorieMap.put("Abbigliamento e accessori", 52);
+        return categorieMap;
     }
 }
