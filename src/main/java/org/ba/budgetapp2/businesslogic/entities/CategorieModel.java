@@ -23,6 +23,9 @@ public class CategorieModel {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "value")
+    private Integer value;
+
     @Column(name = "updateDate")
     private Date updateDate;
 }
