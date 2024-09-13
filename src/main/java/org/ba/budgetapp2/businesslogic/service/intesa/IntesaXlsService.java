@@ -2,6 +2,7 @@ package org.ba.budgetapp2.businesslogic.service.intesa;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.ba.budgetapp2.businesslogic.entities.MovimentiModel;
@@ -86,18 +87,27 @@ public class IntesaXlsService implements XLSServiceInterface {
 
     public void writeToXlsModel(XLSWriter writer) throws IOException {
         Sheet sheet = writer.getSheet();
-        List<MovimentiModel> movimentiModels = movimentiService.getMovimentiListByYearAndMonth(2024,2);
+        List<MovimentiModel> movimentiModels = movimentiService.getMovimentiListByYearAndMonth(writer.getYear(), writer.getMonth());
         Map<String,Integer> map = MappaIntesaFoglio.getMapIntesa();
         log.info(movimentiModels.toString());
         for(MovimentiModel movimentiModel : movimentiModels) {
             log.info("movimentiModel: {}",movimentiModel);
-            Row row = sheet.getRow(map.get(movimentiModel.getCategory()));
-            Cell cell = row.getCell(1);
-            cell.setCellValue("TEST");
+            Integer mapValue = map.get(movimentiModel.getCategory());
+            if(mapValue != null) {
+                Row row = sheet.getRow(mapValue);
+                Cell cell = row.getCell(writer.getMonth());
+                if (!cell.getCellType().equals(CellType.BLANK)) {
+                    StringBuilder sb = new StringBuilder(cell.getCellFormula());
+                    Double value = movimentiModel.getValue();
+                    sb.append((value < 0 ? value.toString() : "+" + value));
+                    cell.setCellFormula(sb.toString());
+                } else {
+                    Double value = movimentiModel.getValue();
+                    cell.setCellFormula(value < 0 ? value.toString() : "+" + value);
+                }
+            }
         }
-        FileOutputStream outputStream = new FileOutputStream("C:\\Users\\Giuseppe\\OneDrive\\Desktop\\LIBRO MASTRO\\PLANNER\\Budget-PlannerTEST.xlsx");
-        writer.getWorkbook().write(outputStream);
-        outputStream.close();
+        writer.write();
     }
 
     //metodi privati di utility alla classe

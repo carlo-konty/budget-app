@@ -41,7 +41,9 @@ public class TestService {
     }
 
     public void testWrite() throws IOException {
-        intesaXlsService.writeToXlsModel(new XLSWriter(2024,1));
+        for(int i=1;i<=12;i++) {
+            intesaXlsService.writeToXlsModel(new XLSWriter(2023,i));
+        }
     }
 
 

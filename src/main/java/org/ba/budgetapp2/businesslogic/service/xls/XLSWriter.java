@@ -7,22 +7,32 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 @Data
 @Slf4j
 public class XLSWriter {
 
-    private int month;
-    private int year;
+
+    private final String path = "C:\\Users\\Giuseppe\\OneDrive\\Desktop\\LIBRO MASTRO\\PLANNER\\Budget-PlannerTEST.xlsx";
+    private Integer month;
+    private Integer year;
     private Sheet sheet;
     private Workbook workbook;
 
-    public XLSWriter(int year,int month) throws IOException {
+    public XLSWriter(Integer year, Integer month) throws IOException {
         this.year = year; this.month = month;
-        FileInputStream file = new FileInputStream("C:\\Users\\Giuseppe\\OneDrive\\Desktop\\LIBRO MASTRO\\PLANNER\\Budget-PlannerTEST.xlsx");
+        FileInputStream file = new FileInputStream(path);
         this.workbook = new XSSFWorkbook(file);
+        this.workbook.setForceFormulaRecalculation(true);
         this.sheet = workbook.getSheetAt(0);
+    }
+
+    public void write() throws IOException {
+        FileOutputStream outputStream = new FileOutputStream(path);
+        workbook.write(outputStream);
+        outputStream.close();
     }
 
 }
