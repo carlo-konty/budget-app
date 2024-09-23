@@ -16,8 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -85,29 +85,36 @@ public class IntesaXlsService implements XLSServiceInterface {
         return allMovimentiModels;
     }
 
-    public void writeToXlsModel(XLSWriter writer) throws IOException {
-        Sheet sheet = writer.getSheet();
-        List<MovimentiModel> movimentiModels = movimentiService.getMovimentiListByYearAndMonth(writer.getYear(), writer.getMonth());
-        Map<String,Integer> map = MappaIntesaFoglio.getMapIntesa();
-        log.info(movimentiModels.toString());
-        for(MovimentiModel movimentiModel : movimentiModels) {
-            log.info("movimentiModel: {}",movimentiModel);
-            Integer mapValue = map.get(movimentiModel.getCategory());
-            if(mapValue != null) {
-                Row row = sheet.getRow(mapValue);
-                Cell cell = row.getCell(writer.getMonth());
-                if (!cell.getCellType().equals(CellType.BLANK)) {
-                    StringBuilder sb = new StringBuilder(cell.getCellFormula());
-                    Double value = movimentiModel.getValue();
-                    sb.append((value < 0 ? value.toString() : "+" + value));
-                    cell.setCellFormula(sb.toString());
-                } else {
-                    Double value = movimentiModel.getValue();
-                    cell.setCellFormula(value < 0 ? value.toString() : "+" + value);
+    public boolean writeToXlsModel(Integer year, Integer month) throws IOException {
+        try {
+            XLSWriter writer = new XLSWriter();
+            Sheet sheet = writer.getSheet();
+            List<MovimentiModel> movimentiModels = movimentiService.getMovimentiListByYearAndMonth(year, month);
+            Map<String, Integer> map = MappaIntesaFoglio.getMapIntesa();
+            log.info(movimentiModels.toString());
+            for (MovimentiModel movimentiModel : movimentiModels) {
+                log.info("movimentiModel: {}", movimentiModel);
+                Integer mapValue = map.get(movimentiModel.getCategory());
+                if (mapValue != null) {
+                    Row row = sheet.getRow(mapValue);
+                    Cell cell = row.getCell(month);
+                    if (!cell.getCellType().equals(CellType.BLANK)) {
+                        StringBuilder sb = new StringBuilder(cell.getCellFormula());
+                        Double value = movimentiModel.getValue();
+                        sb.append((value < 0 ? value.toString() : "+" + value));
+                        cell.setCellFormula(sb.toString());
+                    } else {
+                        Double value = movimentiModel.getValue();
+                        cell.setCellFormula(value < 0 ? value.toString() : "+" + value);
+                    }
                 }
             }
+            writer.write();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
         }
-        writer.write();
+        return true;
     }
 
     //metodi privati di utility alla classe

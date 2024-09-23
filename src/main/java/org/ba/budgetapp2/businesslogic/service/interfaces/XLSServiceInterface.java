@@ -2,7 +2,6 @@ package org.ba.budgetapp2.businesslogic.service.interfaces;
 
 import org.ba.budgetapp2.businesslogic.entities.MovimentiModel;
 import org.ba.budgetapp2.businesslogic.service.xls.XLSReader;
-import org.ba.budgetapp2.businesslogic.service.xls.XLSWriter;
 
 import java.io.IOException;
 import java.util.*;
@@ -17,6 +16,6 @@ public interface XLSServiceInterface {
     Map<String,List<MovimentiModel>> iterateOverFolder() throws IOException;
 
     //scrive sul foglio di calcolo
-    void writeToXlsModel(XLSWriter writer) throws IOException;
+    boolean writeToXlsModel(Integer year, Integer month) throws IOException;
 
 }

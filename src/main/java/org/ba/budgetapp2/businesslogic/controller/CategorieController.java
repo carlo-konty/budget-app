@@ -2,7 +2,6 @@ package org.ba.budgetapp2.businesslogic.controller;
 
 import org.ba.budgetapp2.businesslogic.entities.CategorieModel;
 import org.ba.budgetapp2.businesslogic.service.CategorieService;
-import org.ba.budgetapp2.costants.MappaIntesaFoglio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +16,12 @@ public class CategorieController {
     @GetMapping
     public ResponseEntity getAllCategories() {
         return ResponseEntity.ok(this.categorieService.getAll());
+    }
+
+
+    @GetMapping("by")
+    public ResponseEntity getCategorieByTypeAndName(@RequestParam(required = false) String type, @RequestParam(required = false) String name) {
+        return ResponseEntity.ok(this.categorieService.getByTypeAndName(type,name));
     }
 
     @PostMapping()

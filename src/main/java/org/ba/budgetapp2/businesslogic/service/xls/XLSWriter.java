@@ -16,13 +16,10 @@ public class XLSWriter {
 
 
     private final String path = "C:\\Users\\Giuseppe\\OneDrive\\Desktop\\LIBRO MASTRO\\PLANNER\\Budget-PlannerTEST.xlsx";
-    private Integer month;
-    private Integer year;
     private Sheet sheet;
     private Workbook workbook;
 
-    public XLSWriter(Integer year, Integer month) throws IOException {
-        this.year = year; this.month = month;
+    public XLSWriter() throws IOException {
         FileInputStream file = new FileInputStream(path);
         this.workbook = new XSSFWorkbook(file);
         this.workbook.setForceFormulaRecalculation(true);

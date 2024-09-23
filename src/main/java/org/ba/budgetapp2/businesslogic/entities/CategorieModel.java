@@ -1,5 +1,6 @@
 package org.ba.budgetapp2.businesslogic.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,5 +28,9 @@ public class CategorieModel {
     private Integer value;
 
     @Column(name = "updateDate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date updateDate;
+
+    @Column(name = "type")
+    private String type;
 }

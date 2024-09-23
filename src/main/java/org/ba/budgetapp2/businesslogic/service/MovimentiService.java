@@ -34,6 +34,18 @@ public class MovimentiService {
         return movimentiModel;
     }
 
+    public MovimentiModel update(MovimentiModel movimentiModel) {
+         this.movimentiRepository.update(
+                movimentiModel.getId(),
+                movimentiModel.getDescription(),
+                movimentiModel.getContoOrCarta(),
+                movimentiModel.getValue(),
+                movimentiModel.getCategory(),
+                movimentiModel.getDate()
+                );
+         return movimentiModel;
+    }
+
     @Transactional
     public boolean saveAll(Map<String,List<MovimentiModel>> data) {
         for(Map.Entry<String, List<MovimentiModel>> entry : data.entrySet()) {

@@ -30,8 +30,27 @@ public interface MovimentiRepository extends JpaRepository<MovimentiModel,Long> 
                                 @Param(value = "conto_o_carta") String contoOrCarta
     );
 
-    @Query(value = "select * from budget_dba.movimento \n" +
-            "where (:m is null or date_part('month',date) = :m)\n" +
-            "and (:y is null or date_part('year',date) = :y)",nativeQuery = true)
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE budget_dba.movimento\n" +
+            "SET \n" +
+            "    description = :description,\n" +
+            "    conto_o_carta = :contoOrCarta,\n" +
+            "    value = :value,\n" +
+            "    category = :category,\n" +
+            "    date = :date\n" +
+            "WHERE \n" +
+            "    id = :id\n",nativeQuery = true)
+    void update(@Param(value = "id") Long id,
+                         @Param("description") String description,
+                         @Param("contoOrCarta") String contoOrCarta,
+                         @Param("value") Double value,
+                         @Param("category") String category,
+                         @Param("date") Date date);
+
+    @Query(value = "select * from budget_dba.movimento " +
+            "where (:m is null or date_part('month',date) = :m) " +
+            "and (:y is null or date_part('year',date) = :y) " +
+            "order by 6 asc",nativeQuery = true)
     List<MovimentiModel> getMovimentiModelByMonthAndYear(@Param("y") Integer year, @Param("m") Integer month);
 }
