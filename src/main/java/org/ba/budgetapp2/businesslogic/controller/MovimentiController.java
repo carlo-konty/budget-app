@@ -40,9 +40,19 @@ public class MovimentiController {
         return ResponseEntity.ok(this.movimentiService.update(movimentiModel));
     }
 
+    @DeleteMapping()
+    public ResponseEntity<?> delete(@RequestBody() Long id) {
+        return ResponseEntity.ok(this.movimentiService.delete(id));
+    }
+
     @GetMapping("/run")
     public ResponseEntity<?> run() throws IOException {
         return ResponseEntity.ok(this.movimentiService.saveAll(intesaXlsService.iterateOverFolder()));
+    }
+
+    @GetMapping("/run/by")
+    public ResponseEntity<?> runByYearAndMonth(@RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "month", required = false) Integer month) throws IOException {
+        return ResponseEntity.ok(this.movimentiService.saveAll(intesaXlsService.iterateOverFolderByYearAndMonth(year,month)));
     }
 
     @GetMapping("/write")

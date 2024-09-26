@@ -51,4 +51,21 @@ public class CategorieService {
         }
         return true;
     }
+
+    public CategorieModel update(CategorieModel categorieModel) {
+        categorieModel.setUpdateDate(new Date());
+        this.categorieRepository.update(
+                categorieModel.getName(),
+                categorieModel.getValue(),
+                categorieModel.getUpdateDate(),
+                categorieModel.getType(),
+                categorieModel.getId()
+        );
+        return categorieModel;
+    }
+
+    public CategorieModel delete(CategorieModel categorieModel) {
+        this.categorieRepository.delete(categorieModel.getId());
+        return categorieModel;
+    }
 }

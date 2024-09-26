@@ -53,4 +53,9 @@ public interface MovimentiRepository extends JpaRepository<MovimentiModel,Long> 
             "and (:y is null or date_part('year',date) = :y) " +
             "order by 6 asc",nativeQuery = true)
     List<MovimentiModel> getMovimentiModelByMonthAndYear(@Param("y") Integer year, @Param("m") Integer month);
+
+    @Transactional
+    @Modifying
+    @Query(value = "DELETE FROM BUDGET_DBA.MOVIMENTO WHERE id = :id",nativeQuery = true)
+    void delete(@Param("id") Long id);
 }

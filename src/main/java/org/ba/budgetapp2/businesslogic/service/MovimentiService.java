@@ -60,6 +60,11 @@ public class MovimentiService {
         return this.movimentiRepository.getMovimentiModelByMonthAndYear(year,month);
     }
 
+    public Long delete(Long id) {
+        this.movimentiRepository.delete(id);
+        return id;
+    }
+
 
 
 

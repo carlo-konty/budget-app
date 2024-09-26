@@ -23,7 +23,7 @@ public interface CategorieRepository extends JpaRepository<CategorieModel, Long>
     @Query(value = "SELECT * FROM BUDGET_DBA.CATEGORIA \n" +
             "WHERE (:type IS NULL OR type LIKE  '%' || :type || '%') \n" +
             "AND (:name IS NULL OR UPPER(name) LIKE UPPER(:name) || '%') \n" +
-            "ORDER BY value asc",nativeQuery = true)
+            "ORDER BY name asc",nativeQuery = true)
     List<CategorieModel> getByTypeAndName(@Param("type") String type, @Param("name") String name);
 
     @Transactional
@@ -31,4 +31,19 @@ public interface CategorieRepository extends JpaRepository<CategorieModel, Long>
     @Query(value = "INSERT INTO BUDGET_DBA.CATEGORIA (id, name, value, update_date, type) " +
             "VALUES (nextval('categoria_seq'),:name,:value,:date,:type)",nativeQuery = true)
     void save(@Param("name") String name, @Param("value") Integer value, @Param("date") Date updateDate, @Param("type") String type);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE BUDGET_DBA.CATEGORIA\n" +
+            "SET name = :name,\n" +
+            "    value = :value,\n" +
+            "    update_date = :date,\n" +
+            "    type = :type\n" +
+            "WHERE id = :id",nativeQuery = true)
+    void update(@Param("name") String name, @Param("value") Integer value, @Param("date") Date updateDate, @Param("type") String type, @Param("id") Long id);
+
+    @Transactional
+    @Modifying
+    @Query(value = "DELETE FROM BUDGET_DBA.CATEGORIA WHERE id = :id",nativeQuery = true)
+    void delete(@Param("id") Long id);
 }

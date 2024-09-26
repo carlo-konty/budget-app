@@ -85,6 +85,35 @@ public class IntesaXlsService implements XLSServiceInterface {
         return allMovimentiModels;
     }
 
+    public Map<String,List<MovimentiModel>> iterateOverFolderByYearAndMonth(Integer year, Integer month) throws IOException {
+        Map<String,List<MovimentiModel>> allMovimentiModels = new HashMap<>();
+        String path;
+        if(year != null && month != null) {
+            File file = new File("C:\\Users\\Giuseppe\\OneDrive\\Desktop\\LIBRO MASTRO\\MOVIMENTI\\" + year + "\\" + month + ".xlsx");
+            allMovimentiModels.put(year.toString(),getMovimentiList(new XLSReader(year.toString(), file.getName())));
+            return allMovimentiModels;
+        }
+        if(year != null && month == null) {
+            path = "C:\\Users\\Giuseppe\\OneDrive\\Desktop\\LIBRO MASTRO\\MOVIMENTI\\" + year;
+            File folder = new File(path);
+            File[] listOfFiles = folder.listFiles();
+            List<MovimentiModel> movimentiYear = new ArrayList<>();
+            for (File file : listOfFiles) {
+                if (file.isFile()) {
+                    System.out.println("File: " + file.getName());
+                    movimentiYear.addAll(getMovimentiList(new XLSReader(year.toString(),file.getName())));
+                    allMovimentiModels.put(year.toString(),movimentiYear);
+                }
+            }
+            return allMovimentiModels;
+        }
+        if(year == null && month == null) {
+            return iterateOverFolder();
+        }
+        return allMovimentiModels;
+    }
+
+
     public boolean writeToXlsModel(Integer year, Integer month) throws IOException {
         try {
             XLSWriter writer = new XLSWriter();

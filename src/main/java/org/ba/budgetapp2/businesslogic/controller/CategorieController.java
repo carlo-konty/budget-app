@@ -34,4 +34,14 @@ public class CategorieController {
     public ResponseEntity saveAll() {
         return ResponseEntity.ok(this.categorieService.saveAll());
     }
+
+    @PutMapping()
+    public ResponseEntity update(@RequestBody CategorieModel categorieModel) {
+        return ResponseEntity.ok(this.categorieService.update(categorieModel));
+    }
+
+    @DeleteMapping()
+    public ResponseEntity delete(@RequestBody CategorieModel categorieModel) {
+        return ResponseEntity.ok(this.categorieService.delete(categorieModel));
+    }
 }
