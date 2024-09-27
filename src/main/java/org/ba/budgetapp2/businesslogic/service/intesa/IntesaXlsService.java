@@ -146,6 +146,8 @@ public class IntesaXlsService implements XLSServiceInterface {
         return true;
     }
 
+
+
     //metodi privati di utility alla classe
     private Integer getMovimentiFirstIndex(Map<Integer,List<String>> data) throws IOException {
         for (Map.Entry<Integer, List<String>> entry : data.entrySet()) {

@@ -55,7 +55,7 @@ public class MovimentiController {
         return ResponseEntity.ok(this.movimentiService.saveAll(intesaXlsService.iterateOverFolderByYearAndMonth(year,month)));
     }
 
-    @GetMapping("/write")
+    @GetMapping("/write/by")
     public ResponseEntity<?> write(@RequestParam("year") Integer year, @RequestParam("month") Integer month) throws IOException {
         return ResponseEntity.ok(this.intesaXlsService.writeToXlsModel(year, month));
     }
