@@ -1,5 +1,6 @@
 package org.ba.budgetapp2.businesslogic.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.ba.budgetapp2.businesslogic.entities.MovimentiModel;
 import org.ba.budgetapp2.businesslogic.service.MovimentiService;
 import org.ba.budgetapp2.businesslogic.service.intesa.IntesaXlsService;
@@ -12,6 +13,7 @@ import java.io.IOException;
 
 @Controller
 @RequestMapping("/movimenti")
+@Slf4j
 public class MovimentiController {
 
     @Autowired
@@ -51,13 +53,14 @@ public class MovimentiController {
     }
 
     @GetMapping("/run/by")
-    public ResponseEntity<?> runByYearAndMonth(@RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "month", required = false) Integer month) throws IOException {
+    public ResponseEntity<?> runByYearAndMonth(@RequestParam(name = "year", required = false) Integer year, @RequestParam(name = "month", required = false) Integer month) throws IOException {
         return ResponseEntity.ok(this.movimentiService.saveAll(intesaXlsService.iterateOverFolderByYearAndMonth(year,month)));
     }
 
     @GetMapping("/write/by")
-    public ResponseEntity<?> write(@RequestParam("year") Integer year, @RequestParam("month") Integer month) throws IOException {
-        return ResponseEntity.ok(this.intesaXlsService.writeToXlsModel(year, month));
+    public ResponseEntity<?> write(@RequestParam("year") String year, @RequestParam("month") String month) throws IOException {
+        log.info("year: {}, month: {}", year, month);
+        return ResponseEntity.ok(intesaXlsService.writeToXlsModel(Integer.valueOf(year), Integer.valueOf(month)));
     }
 
 }

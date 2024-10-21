@@ -120,7 +120,7 @@ public class IntesaXlsService implements XLSServiceInterface {
             Sheet sheet = writer.getSheet();
             List<MovimentiModel> movimentiModels = movimentiService.getMovimentiListByYearAndMonth(year, month);
             Map<String, Integer> map = MappaIntesaFoglio.getMapIntesa();
-            log.info(movimentiModels.toString());
+            log.info("movimenti size {}",movimentiModels.size());
             for (MovimentiModel movimentiModel : movimentiModels) {
                 log.info("movimentiModel: {}", movimentiModel);
                 Integer mapValue = map.get(movimentiModel.getCategory());
