@@ -23,17 +23,8 @@ public class TestService {
         return "Hello World!";
     }
 
-    public Map<Integer,List<String>> readData() throws IOException {
-        XLSReader xlsReader = new XLSReader("2024","8");
-        return xlsReader.getData();
-    }
-
     public Integer getIndex() throws IOException {
         return -1;
-    }
-
-    public List<MovimentiModel> getMovimenti() throws IOException {
-        return intesaXlsService.getMovimentiList(new XLSReader("2024","8"));
     }
 
     public Map<String,List<MovimentiModel>> testDirectory() throws IOException {
@@ -44,6 +35,10 @@ public class TestService {
         for(int i=1;i<=12;i++) {
             intesaXlsService.writeToXlsModel(2024,i);
         }
+    }
+
+    public void testRead() throws IOException {
+
     }
 
 

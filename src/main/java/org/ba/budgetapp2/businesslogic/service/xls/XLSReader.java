@@ -18,10 +18,17 @@ public class XLSReader {
     private FileInputStream file;
     private Workbook workbook;
     private Map<Integer,List<String>> data = new HashMap<>();
+    private final String FILE_PATH = "C:\\Users\\Giuseppe\\OneDrive\\Documents\\libro_mastro\\movimenti";
 
-    public XLSReader(String year, String month) throws IOException {
+
+    public XLSReader(String year, String month, String fileName) throws IOException {
         this.year = year; this.month = month;
-        this.file = new FileInputStream("C:\\Users\\Giuseppe\\OneDrive\\Desktop\\LIBRO MASTRO\\MOVIMENTI\\" + year + "\\" + month);
+        if(fileName != null) {
+            this.file = new FileInputStream(fileName);
+        }
+        else {
+            this.file = new FileInputStream(FILE_PATH + "\\" + year + "\\" + month);
+        }
         this.workbook = new XSSFWorkbook(file);
         Sheet sheet = workbook.getSheetAt(0);
         int i = 0;

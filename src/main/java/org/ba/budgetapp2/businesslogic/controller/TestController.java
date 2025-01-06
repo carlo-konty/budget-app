@@ -22,16 +22,6 @@ public class TestController {
         return ResponseEntity.ok(this.testService.test());
     }
 
-    @GetMapping("/run")
-    public ResponseEntity run() throws IOException {
-        return ResponseEntity.ok(this.testService.readData());
-    }
-
-    @GetMapping("/list")
-    public ResponseEntity index() throws IOException {
-        return ResponseEntity.ok(this.testService.getMovimenti());
-    }
-
     @GetMapping("/directory")
     public ResponseEntity indexDirectory() throws IOException {
         return ResponseEntity.ok(this.testService.testDirectory());

@@ -16,8 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -28,6 +28,7 @@ public class IntesaXlsService implements XLSServiceInterface {
     @Autowired
     private MovimentiService movimentiService;
 
+    private final String FILE_PATH = "C:\\Users\\Giuseppe\\OneDrive\\Documents\\libro_mastro\\movimenti";
     private Map<Integer, List<String>> data = new HashMap<>();
 
 
@@ -57,8 +58,7 @@ public class IntesaXlsService implements XLSServiceInterface {
     //TODO DA SPOSTARE ALTROVE IN UNA FACADE
     public Map<String,List<MovimentiModel>> iterateOverFolder() throws IOException {
         Map<String,List<MovimentiModel>> allMovimentiModels = new HashMap<>();
-        final String path = "C:\\Users\\Giuseppe\\OneDrive\\Desktop\\LIBRO MASTRO\\MOVIMENTI";
-        File folder = new File(path);
+        File folder = new File(FILE_PATH);
         File[] listOfFiles = folder.listFiles();
         List<String> folderNames = new ArrayList<>();
 
@@ -71,13 +71,13 @@ public class IntesaXlsService implements XLSServiceInterface {
             }
         }
         for (String folderName : folderNames) {
-            File innerFolder = new File(path + "/" + folderName);
+            File innerFolder = new File(FILE_PATH + "/" + folderName);
             File[] listOfInnerFolders = innerFolder.listFiles();
             List<MovimentiModel> movimentiYear = new ArrayList<>();
             for(File file : listOfInnerFolders) {
                 if (file.isFile()) {
                     System.out.println("File: " + file.getName());
-                    movimentiYear.addAll(getMovimentiList(new XLSReader(folderName,file.getName())));
+                    movimentiYear.addAll(getMovimentiList(new XLSReader(folderName,file.getName(),null)));
                     allMovimentiModels.put(folderName,movimentiYear);
                 }
             }
@@ -85,30 +85,39 @@ public class IntesaXlsService implements XLSServiceInterface {
         return allMovimentiModels;
     }
 
-    public Map<String,List<MovimentiModel>> iterateOverFolderByYearAndMonth(Integer year, Integer month) throws IOException {
+    public Map<String,List<MovimentiModel>> iterateOverFolderByYearAndMonth(Integer year, Integer month, String fileName) throws IOException {
         Map<String,List<MovimentiModel>> allMovimentiModels = new HashMap<>();
         String path;
-        if(year != null && month != null) {
-            File file = new File("C:\\Users\\Giuseppe\\OneDrive\\Desktop\\LIBRO MASTRO\\MOVIMENTI\\" + year + "\\" + month + ".xlsx");
-            allMovimentiModels.put(year.toString(),getMovimentiList(new XLSReader(year.toString(), file.getName())));
-            return allMovimentiModels;
-        }
-        if(year != null && month == null) {
-            path = "C:\\Users\\Giuseppe\\OneDrive\\Desktop\\LIBRO MASTRO\\MOVIMENTI\\" + year;
-            File folder = new File(path);
-            File[] listOfFiles = folder.listFiles();
-            List<MovimentiModel> movimentiYear = new ArrayList<>();
-            for (File file : listOfFiles) {
-                if (file.isFile()) {
-                    System.out.println("File: " + file.getName());
-                    movimentiYear.addAll(getMovimentiList(new XLSReader(year.toString(),file.getName())));
-                    allMovimentiModels.put(year.toString(),movimentiYear);
-                }
+        try {
+            if (year != null && month == null && fileName != "") {
+                File file = new File(FILE_PATH + "\\" + year + "\\" + fileName);
+                allMovimentiModels.put(year.toString(), getMovimentiList(new XLSReader(year.toString(), null, file.getAbsolutePath())));
+                return allMovimentiModels;
             }
+            if (year != null && month != null) {
+                File file = new File(FILE_PATH + "\\" + year + "\\" + month + ".xlsx");
+                allMovimentiModels.put(year.toString(), getMovimentiList(new XLSReader(year.toString(), month.toString(), file.getAbsolutePath())));
+                return allMovimentiModels;
+            }
+            if (year != null) {
+                path = FILE_PATH + "\\" + year;
+                File folder = new File(path);
+                File[] listOfFiles = folder.listFiles();
+                List<MovimentiModel> movimentiYear = new ArrayList<>();
+                for (File file : listOfFiles) {
+                    if (file.isFile()) {
+                        System.out.println("File: " + file.getName());
+                        movimentiYear.addAll(getMovimentiList(new XLSReader(year.toString(), file.getName(), null)));
+                        allMovimentiModels.put(year.toString(), movimentiYear);
+                    }
+                }
+                return allMovimentiModels;
+            }
+            if (year == null && month == null) {
+                return iterateOverFolder();
+            }
+        } catch (FileNotFoundException e) {
             return allMovimentiModels;
-        }
-        if(year == null && month == null) {
-            return iterateOverFolder();
         }
         return allMovimentiModels;
     }
@@ -145,8 +154,6 @@ public class IntesaXlsService implements XLSServiceInterface {
         }
         return true;
     }
-
-
 
     //metodi privati di utility alla classe
     private Integer getMovimentiFirstIndex(Map<Integer,List<String>> data) throws IOException {

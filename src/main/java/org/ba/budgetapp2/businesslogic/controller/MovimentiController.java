@@ -53,8 +53,10 @@ public class MovimentiController {
     }
 
     @GetMapping("/run/by")
-    public ResponseEntity<?> runByYearAndMonth(@RequestParam(name = "year", required = false) Integer year, @RequestParam(name = "month", required = false) Integer month) throws IOException {
-        return ResponseEntity.ok(this.movimentiService.saveAll(intesaXlsService.iterateOverFolderByYearAndMonth(year,month)));
+    public ResponseEntity<?> runByYearAndMonth(@RequestParam(name = "year", required = false) Integer year,
+                                               @RequestParam(name = "month", required = false) Integer month,
+                                               @RequestParam(name = "file", required = false) String fileName) throws IOException {
+        return ResponseEntity.ok(this.movimentiService.saveAll(intesaXlsService.iterateOverFolderByYearAndMonth(year,month,fileName)));
     }
 
     @GetMapping("/write/by")

@@ -58,4 +58,5 @@ public interface MovimentiRepository extends JpaRepository<MovimentiModel,Long> 
     @Modifying
     @Query(value = "DELETE FROM BUDGET_DBA.MOVIMENTO WHERE id = :id",nativeQuery = true)
     void delete(@Param("id") Long id);
+
 }
