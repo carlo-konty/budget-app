@@ -31,12 +31,6 @@ public class TestService {
         return intesaXlsService.iterateOverFolder();
     }
 
-    public void testWrite() throws IOException {
-        for(int i=1;i<=12;i++) {
-            intesaXlsService.writeToXlsModel(2024,i);
-        }
-    }
-
     public void testRead() throws IOException {
 
     }

@@ -10,6 +10,7 @@ import org.ba.budgetapp2.businesslogic.service.MovimentiService;
 import org.ba.budgetapp2.businesslogic.service.interfaces.XLSServiceInterface;
 import org.ba.budgetapp2.businesslogic.service.xls.XLSReader;
 import org.ba.budgetapp2.businesslogic.service.xls.XLSWriter;
+import org.ba.budgetapp2.costants.Category;
 import org.ba.budgetapp2.costants.IntesaSanPaoloIndex;
 import org.ba.budgetapp2.costants.MappaIntesaFoglio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +90,7 @@ public class IntesaXlsService implements XLSServiceInterface {
         Map<String,List<MovimentiModel>> allMovimentiModels = new HashMap<>();
         String path;
         try {
-            if (year != null && month == null && fileName != "") {
+            if (year != null && !fileName.equals("")) {
                 File file = new File(FILE_PATH + "\\" + year + "\\" + fileName);
                 allMovimentiModels.put(year.toString(), getMovimentiList(new XLSReader(year.toString(), null, file.getAbsolutePath())));
                 return allMovimentiModels;
@@ -123,9 +124,9 @@ public class IntesaXlsService implements XLSServiceInterface {
     }
 
 
-    public boolean writeToXlsModel(Integer year, Integer month) throws IOException {
+    /*public boolean writeToXlsModel(Integer year, Integer month) throws IOException {
         try {
-            XLSWriter writer = new XLSWriter();
+            XLSWriter writer = new XLSWriter(month + ".xlsx",0);
             Sheet sheet = writer.getSheet();
             List<MovimentiModel> movimentiModels = movimentiService.getMovimentiListByYearAndMonth(year, month);
             Map<String, Integer> map = MappaIntesaFoglio.getMapIntesa();
@@ -153,6 +154,50 @@ public class IntesaXlsService implements XLSServiceInterface {
             return false;
         }
         return true;
+    }*/
+
+    public boolean writeToXlsModel(Integer year, Integer month, String fileName) throws IOException {
+        try {
+            XLSWriter writer = new XLSWriter(fileName, 2);
+            Sheet sheet = writer.getSheet();
+            List<MovimentiModel> movimentiModels = movimentiService.getMovimentiListByYearAndMonth(year, month);
+            int firstRow = this.findFirstEmptyRow(sheet);
+            Map<String,Integer> categoryMap = Category.getMap();
+            Map<String,Integer> intesaMap = MappaIntesaFoglio.getMapIntesa();
+            log.info("movimenti: {}",movimentiModels.size());
+            log.info("firstRow: {}",firstRow);
+            for(MovimentiModel movimentiModel : movimentiModels) {
+                Integer categoryValue = intesaMap.get(movimentiModel.getCategory());
+                String category = "";
+                for(Map.Entry<String,Integer> entry : categoryMap.entrySet()) {
+                    if(entry.getValue().equals(categoryValue)) {
+                        category = entry.getKey();
+                    }
+                }
+                Row row = sheet.getRow(firstRow);
+                row.createCell(3).setCellValue(movimentiModel.getDescription());
+                row.createCell(4).setCellValue(category);
+                row.createCell(5).setCellValue(Math.abs(movimentiModel.getValue()));
+                row.createCell(6).setCellValue(movimentiModel.getDate());
+                row.createCell(7).setCellValue(movimentiModel.getValue() > 0 ? "ENTRATA" : "USCITA");
+                firstRow++;
+            }
+            writer.write();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    private int findFirstEmptyRow(Sheet sheet) {
+        int rowCount = sheet.getPhysicalNumberOfRows();
+        for (int i = 0; i < rowCount; i++) {
+            Row row = sheet.getRow(i);
+            if (row == null || row.getCell(3) == null || row.getCell(3).getCellType() == CellType.BLANK) {
+                return i;
+            }
+        }
+        return rowCount;
     }
 
     //metodi privati di utility alla classe

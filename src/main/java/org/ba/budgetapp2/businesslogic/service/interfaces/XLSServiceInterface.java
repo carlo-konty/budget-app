@@ -16,6 +16,6 @@ public interface XLSServiceInterface {
     Map<String,List<MovimentiModel>> iterateOverFolder() throws IOException;
 
     //scrive sul foglio di calcolo
-    boolean writeToXlsModel(Integer year, Integer month) throws IOException;
+    boolean writeToXlsModel(Integer year, Integer month, String fileName) throws IOException;
 
 }

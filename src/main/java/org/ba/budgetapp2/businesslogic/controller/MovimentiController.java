@@ -60,9 +60,10 @@ public class MovimentiController {
     }
 
     @GetMapping("/write/by")
-    public ResponseEntity<?> write(@RequestParam("year") String year, @RequestParam("month") String month) throws IOException {
-        log.info("year: {}, month: {}", year, month);
-        return ResponseEntity.ok(intesaXlsService.writeToXlsModel(Integer.valueOf(year), Integer.valueOf(month)));
+    public ResponseEntity<?> write(@RequestParam("year") String year,
+                                   @RequestParam("file") String fileName) throws IOException {
+        log.info("year: {}, month: {}", year);
+        return ResponseEntity.ok(intesaXlsService.writeToXlsModel(Integer.valueOf(year), null, fileName));
     }
 
 }

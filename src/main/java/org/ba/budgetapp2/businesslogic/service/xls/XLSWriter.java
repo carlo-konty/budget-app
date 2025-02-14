@@ -15,19 +15,21 @@ import java.io.IOException;
 public class XLSWriter {
 
 
-    private final String path = "C:\\Users\\Giuseppe\\OneDrive\\Desktop\\LIBRO MASTRO\\PLANNER\\Budget-PlannerTEST.xlsx";
+    private final String path = "C:\\Users\\Giuseppe\\OneDrive\\Documents\\libro_mastro\\planner";
+    private String fileName;
     private Sheet sheet;
     private Workbook workbook;
 
-    public XLSWriter() throws IOException {
-        FileInputStream file = new FileInputStream(path);
+    public XLSWriter(String fileName, Integer sheet) throws IOException {
+        this.fileName = fileName;
+        FileInputStream file = new FileInputStream(path + "\\" + this.fileName);
         this.workbook = new XSSFWorkbook(file);
         this.workbook.setForceFormulaRecalculation(true);
-        this.sheet = workbook.getSheetAt(0);
+        this.sheet = workbook.getSheetAt(sheet);
     }
 
     public void write() throws IOException {
-        FileOutputStream outputStream = new FileOutputStream(path);
+        FileOutputStream outputStream = new FileOutputStream(path + "\\" + this.fileName);
         workbook.write(outputStream);
         outputStream.close();
     }
